@@ -33,7 +33,10 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
         run: python scripts/crawl_lottery.py
+<<<<<<< HEAD
 
+=======
+>>>>>>> 36aaf71 (fix: update workflow with correct working-directory parameter)
       
       - name: Notify on failure
         if: failure()
