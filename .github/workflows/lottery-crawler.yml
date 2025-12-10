@@ -1,0 +1,41 @@
+name: Lottery Crawler
+
+on:
+  schedule:
+    # 每天 08:00 UTC (台灣時間 16:00) 執行一次
+    - cron: '0 8 * * *'
+  
+  # 允許手動觸發
+  workflow_dispatch:
+
+jobs:
+  crawl-lottery:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+      
+      - name: Run lottery crawler
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+        run: |
+          cd backend
+          python scripts/crawl_lottery.py
+      
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "Lottery crawler failed!"
+          exit 1
