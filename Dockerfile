@@ -30,7 +30,7 @@ EXPOSE 8000
 
 # 健康檢查
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" || exit 1
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health' )" || exit 1
 
-# 啟動應用
-CMD ["python", "-m", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# 啟動應用 (使用 shell 形式以支持環境變數展開)
+CMD sh -c "python -m uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-8000}"
