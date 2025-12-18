@@ -11,10 +11,10 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 
 try:
-    from anthropic import Anthropic
-    ANTHROPIC_AVAILABLE = True
+    from openai import OpenAI
+    OPENAI_AVAILABLE = True
 except ImportError:
-    ANTHROPIC_AVAILABLE = False
+    OPENAI_AVAILABLE = False
 
 from ..config import settings
 from ..models import LotteryStatistics, LotteryDraw
@@ -64,8 +64,11 @@ class AIRecommender:
         self.db = db
         self.client = None
         
-        if ANTHROPIC_AVAILABLE and settings.CLAUDE_API_KEY:
-            self.client = Anthropic(api_key=settings.CLAUDE_API_KEY)
+        if OPENAI_AVAILABLE and settings.MANUS_API_KEY:
+            self.client = OpenAI(
+                api_key=settings.MANUS_API_KEY,
+                base_url=settings.MANUS_API_BASE_URL
+            )
     
     async def generate_recommendation(
         self,
@@ -243,13 +246,13 @@ class AIRecommender:
             請用繁體中文回覆，說明這組號碼的選擇依據和特點。
             """
             
-            response = self.client.messages.create(
-                model="claude-3-haiku-20240307",
+            response = self.client.chat.completions.create(
+                model="gpt-4.1-mini",
                 max_tokens=200,
                 messages=[{"role": "user", "content": prompt}]
             )
             
-            return response.content[0].text
+            return response.choices[0].message.content
             
         except Exception as e:
             return self._generate_default_analysis(lottery_type, numbers, strategy)
