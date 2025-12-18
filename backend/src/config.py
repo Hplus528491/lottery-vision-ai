@@ -27,9 +27,9 @@ class Settings(BaseSettings):
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     JWT_REFRESH_TOKEN_EXPIRE_DAYS: int = 7
     
-    # Claude API 配置
-    CLAUDE_API_KEY: Optional[str] = None
-    CLAUDE_MODEL: str = "claude-3-sonnet-20240229"
+    # Manus API 配置
+    MANUS_API_KEY: Optional[str] = None
+    MANUS_API_BASE_URL: str = "https://api.manus.ai/v1"
     
     # 前端配置
     FRONTEND_URL: str = "http://localhost:3000"
