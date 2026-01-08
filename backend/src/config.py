@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     DEBUG: bool = False
     
     # 資料庫配置
-    DATABASE_URL: str = "postgresql://user:password@localhost:5432/lottery"
+    DATABASE_URL: str  # 從環境變量讀取，無默認值
     
     # JWT 配置
     JWT_SECRET_KEY: str = "your-secret-key-change-in-production"
