@@ -10,6 +10,23 @@ from pydantic_settings import BaseSettings
 from functools import lru_cache
 
 
+def get_database_url() -> str:
+    """獲取並修正數據庫連接字符串"""
+    database_url = os.getenv("DATABASE_URL", "")
+    
+    if not database_url:
+        raise ValueError("DATABASE_URL environment variable is required")
+    
+    # Railway 的 Postgres 使用 postgres:// 開頭，需要轉換為 postgresql://
+    if database_url.startswith("postgres://"):
+        database_url = database_url.replace("postgres://", "postgresql+psycopg2://", 1)
+    elif database_url.startswith("postgresql://"):
+        # 確保使用 psycopg2 driver
+        database_url = database_url.replace("postgresql://", "postgresql+psycopg2://", 1)
+    
+    return database_url
+
+
 class Settings(BaseSettings):
     """應用配置類"""
     
@@ -19,7 +36,7 @@ class Settings(BaseSettings):
     DEBUG: bool = False
     
     # 資料庫配置
-    DATABASE_URL: str = "postgresql://user:password@localhost:5432/lottery"
+    DATABASE_URL: str = get_database_url()  # 從環境變量讀取並自動轉換格式
     
     # JWT 配置
     JWT_SECRET_KEY: str = "your-secret-key-change-in-production"
