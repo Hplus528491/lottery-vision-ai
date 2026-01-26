@@ -41,7 +41,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str  # 從環境變量讀取，無默認值
     
     # JWT 配置
-    JWT_SECRET_KEY: str = "your-secret-key-change-in-production"
+    JWT_SECRET_KEY: str = "your-secret-key-min-32-characters-long-for-security"
     JWT_ALGORITHM: str = "HS256"
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     JWT_REFRESH_TOKEN_EXPIRE_DAYS: int = 7
