@@ -41,6 +41,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str  # 從環境變量讀取，無默認值
     
     # JWT 配置
+    
     JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY", "your-secret-key-min-32-characters-long-for-security")
     JWT_ALGORITHM: str = os.getenv("JWT_ALGORITHM", "HS256")
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
