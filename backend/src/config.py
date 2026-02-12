@@ -38,14 +38,19 @@ class Settings(BaseSettings):
     # 資料庫配置
     DATABASE_URL: str = get_database_url()  # 從環境變量讀取並自動轉換格式
     
-    DATABASE_URL: str  # 從環境變量讀取，無默認值
+    # DATABASE_URL: str  # 從環境變量讀取，無默認值
     
     # JWT 配置
     
-    JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY", "your-secret-key-min-32-characters-long-for-security")
-    JWT_ALGORITHM: str = os.getenv("JWT_ALGORITHM", "HS256")
-    JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
-    JWT_REFRESH_TOKEN_EXPIRE_DAYS: int = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", "7"))
+    # JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY", "your-secret-key-min-32-characters-long-for-security")
+    # JWT_ALGORITHM: str = os.getenv("JWT_ALGORITHM", "HS256")
+    # JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
+    # JWT_REFRESH_TOKEN_EXPIRE_DAYS: int = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", "7"))
+
+    JWT_SECRET_KEY: str = "your-secret-key-min-32-characters-long-for-security"
+    JWT_ALGORITHM: str = "HS256"
+    JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    JWT_REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
     
     # Manus API 配置
