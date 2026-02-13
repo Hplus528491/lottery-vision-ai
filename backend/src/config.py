@@ -72,7 +72,7 @@ class Settings(BaseSettings):
         case_sensitive = True
 
 
-# @lru_cache()
+@lru_cache()
 def get_settings() -> Settings:
     """
     獲取應用配置 (使用緩存)
