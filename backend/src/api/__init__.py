@@ -8,7 +8,8 @@ from .routes import (
     auth_router,
     lottery_router,
     recommendation_router,
-    credits_router
+    credits_router,
+    debug_router  # ⚠️ 臨時調試路由
 )
 
 from .schemas import (
@@ -52,6 +53,7 @@ __all__ = [
     "lottery_router",
     "recommendation_router",
     "credits_router",
+    "debug_router",  # ⚠️ 臨時調試路由
     
     # Schemas
     "ResponseBase",

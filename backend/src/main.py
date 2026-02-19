@@ -17,7 +17,8 @@ from .api import (
     auth_router,
     lottery_router,
     recommendation_router,
-    credits_router
+    credits_router,
+    debug_router  # ⚠️ 臨時調試路由
 )
 
 
@@ -110,6 +111,7 @@ app.include_router(auth_router, prefix=API_PREFIX)
 app.include_router(lottery_router, prefix=API_PREFIX)
 app.include_router(recommendation_router, prefix=API_PREFIX)
 app.include_router(credits_router, prefix=API_PREFIX)
+app.include_router(debug_router, prefix=API_PREFIX)  # ⚠️ 臨時調試路由
 
 
 # 健康檢查端點
