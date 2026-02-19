@@ -11,11 +11,15 @@ from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
+import logging
 
 from ..config import settings
 from ..database import get_db
 from ..models import User
 from ..exceptions import AuthenticationError, ErrorCode
+
+# 設置日誌
+logger = logging.getLogger(__name__)
 
 
 # 密碼加密上下文
@@ -66,6 +70,10 @@ def create_access_token(
     Returns:
         str: JWT 令牌
     """
+    # 調試日誌：顯示密鑰前 30 個字符
+    logger.info(f"[TOKEN_CREATE] Using JWT_SECRET_KEY: {settings.JWT_SECRET_KEY[:30]}...")
+    logger.info(f"[TOKEN_CREATE] Token data: {data}")
+    
     to_encode = data.copy()
     
     if expires_delta:
@@ -82,6 +90,8 @@ def create_access_token(
         settings.JWT_SECRET_KEY,
         algorithm=settings.JWT_ALGORITHM
     )
+    
+    logger.info(f"[TOKEN_CREATE] Token created successfully: {encoded_jwt[:50]}...")
     
     return encoded_jwt
 
@@ -100,6 +110,9 @@ def create_refresh_token(
     Returns:
         str: JWT 令牌
     """
+    # 調試日誌：顯示密鑰前 30 個字符
+    logger.info(f"[TOKEN_REFRESH] Using JWT_SECRET_KEY: {settings.JWT_SECRET_KEY[:30]}...")
+    
     to_encode = data.copy()
     
     if expires_delta:
@@ -117,6 +130,8 @@ def create_refresh_token(
         algorithm=settings.JWT_ALGORITHM
     )
     
+    logger.info(f"[TOKEN_REFRESH] Token created successfully: {encoded_jwt[:50]}...")
+    
     return encoded_jwt
 
 
@@ -133,14 +148,21 @@ def decode_token(token: str) -> dict:
     Raises:
         AuthenticationError: 令牌無效或過期
     """
+    # 調試日誌：顯示密鑰前 30 個字符
+    logger.info(f"[TOKEN_DECODE] Using JWT_SECRET_KEY: {settings.JWT_SECRET_KEY[:30]}...")
+    logger.info(f"[TOKEN_DECODE] Token to decode: {token[:50]}...")
+    
     try:
         payload = jwt.decode(
             token,
             settings.JWT_SECRET_KEY,
             algorithms=[settings.JWT_ALGORITHM]
         )
+        logger.info(f"[TOKEN_DECODE] Token decoded successfully! Payload: {payload}")
         return payload
-    except JWTError:
+    except JWTError as e:
+        logger.error(f"[TOKEN_DECODE] Token decode failed: {str(e)}")
+        logger.error(f"[TOKEN_DECODE] Token: {token[:80]}...")
         raise AuthenticationError(
             error_code=ErrorCode.TOKEN_INVALID,
             message="無效的令牌"
